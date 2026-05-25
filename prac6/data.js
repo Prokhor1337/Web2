@@ -1,7 +1,7 @@
 "use strict";
 
 export const student = { 
-    firstName: "Прохор", 
+    firstName: "Віталік", 
     age: 19, 
     university: "Університет" 
 };
