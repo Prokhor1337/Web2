@@ -1,9 +1,9 @@
 "use strict";
 
-export const user = { 
-    userName: "Макс", 
-    age: 20, 
-    city: "Київ" 
+export const student = { 
+    firstName: "Прохор", 
+    age: 19, 
+    university: "Університет" 
 };
 
-export var x = 100
+export const defaultMultiplier = 5;
