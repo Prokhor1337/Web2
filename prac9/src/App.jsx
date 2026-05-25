@@ -4,6 +4,7 @@ import "./App.css";
 export default function App() {
     const [text, setText] = useState("");
     const [tasks, setTasks] = useState([]);
+    const [filter, setFilter] = useState("All");
 
     const addTask = () => {
         if (!text.trim()) return;
@@ -21,6 +22,12 @@ export default function App() {
         setTasks(tasks.filter(t => t.id !== id));
     };
 
+    const filteredTasks = tasks.filter(task => {
+        if (filter === "Active") return !task.done;
+        if (filter === "Done") return task.done;
+        return true;
+    });
+
     return (
         <div className="app">
             <h1>Mini ToDo</h1>
@@ -32,8 +39,15 @@ export default function App() {
                 />
                 <button onClick={addTask}>Add</button>
             </div>
+            
+            <div className="filters">
+                <button onClick={() => setFilter("All")}>All</button>
+                <button onClick={() => setFilter("Active")}>Active</button>
+                <button onClick={() => setFilter("Done")}>Done</button>
+            </div>
+
             <ul>
-                {tasks.map(task => (
+                {filteredTasks.map(task => (
                     <li key={task.id}>
                         <span
                             onClick={() => toggleTask(task.id)}
