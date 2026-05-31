@@ -3,11 +3,15 @@
 const API_URL = "https://api.tvmaze.com/shows";
 
 let allMovies = [];
+let currentPage = 1;
+const itemsPerPage = 12;
 
 const moviesContainer = document.getElementById('moviesContainer');
 const searchInput = document.getElementById('searchInput');
 const sortSelect = document.getElementById('sortSelect');
 const errorMessage = document.getElementById('errorMessage');
+const movieCounter = document.getElementById('movieCounter');
+const pagination = document.getElementById('pagination');
 
 async function fetchMovies() {
     try {
@@ -19,7 +23,7 @@ async function fetchMovies() {
         
         const data = await response.json();
         allMovies = data;
-        displayMovies(allMovies);
+        handleProcessData();
     } catch (error) {
         showError(`Не вдалося завантажити дані: ${error.message}`);
     }
@@ -27,8 +31,13 @@ async function fetchMovies() {
 
 function displayMovies(movies) {
     moviesContainer.innerHTML = "";
+    movieCounter.textContent = `Знайдено фільмів: ${movies.length}`;
     
-    movies.forEach(movie => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedMovies = movies.slice(startIndex, endIndex);
+
+    paginatedMovies.forEach(movie => {
         const { name, image, rating, genres } = movie;
         
         const movieHTML = `
@@ -41,9 +50,42 @@ function displayMovies(movies) {
         `;
         moviesContainer.insertAdjacentHTML('beforeend', movieHTML);
     });
+
+    renderPagination(movies.length);
 }
 
-function handleProcessData() {
+function renderPagination(totalItems) {
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = "Попередня";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        currentPage--;
+        handleProcessData(false);
+    };
+    pagination.appendChild(prevBtn);
+
+    const pageInfo = document.createElement('span');
+    pageInfo.textContent = ` Сторінка ${currentPage} з ${totalPages} `;
+    pagination.appendChild(pageInfo);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = "Наступна";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        currentPage++;
+        handleProcessData(false);
+    };
+    pagination.appendChild(nextBtn);
+}
+
+function handleProcessData(resetPage = true) {
+    if (resetPage) currentPage = 1;
+
     let filtered = allMovies.filter(movie => 
         movie.name.toLowerCase().includes(searchInput.value.toLowerCase())
     );
@@ -63,7 +105,7 @@ function showError(message) {
     errorMessage.className = "error-visible";
 }
 
-searchInput.addEventListener('input', handleProcessData);
-sortSelect.addEventListener('change', handleProcessData);
+searchInput.addEventListener('input', () => handleProcessData(true));
+sortSelect.addEventListener('change', () => handleProcessData(true));
 
 fetchMovies();

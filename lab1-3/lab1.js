@@ -1,6 +1,5 @@
 "use strict";
 
-// Універсальний фабричний метод для валідації (каррування)
 const dataProcessor = (transformer) => (validator) => (errorMessage) => (value) => {
     const transformedValue = transformer(value);
     if (validator(transformedValue)) return transformedValue;
@@ -11,7 +10,6 @@ const parseAge = dataProcessor(Number)((n) => !isNaN(n) && n > 0 && n < 120)("Н
 const validateStr = dataProcessor(String)((s) => s.trim().length > 0)("Поле не може бути порожнім");
 const validateYear = dataProcessor(Number)((n) => !isNaN(n) && n >= 0)("Некоректна кількість років");
 
-// Базовий клас секції
 class ResumeSection {
     constructor(title) {
         this._title = title;
@@ -28,7 +26,6 @@ class ResumeSection {
     }
 }
 
-// Секція: Особиста інформація
 class PersonalInfo extends ResumeSection {
     constructor(name, email, age) {
         super("Особиста інформація");
@@ -55,7 +52,6 @@ class PersonalInfo extends ResumeSection {
     }
 }
 
-// Секція: Досвід
 class Experience extends ResumeSection {
     constructor(jobTitle, company, years) {
         super("Досвід роботи");
@@ -80,7 +76,6 @@ class Experience extends ResumeSection {
     }
 }
 
-// Секція: Освіта
 class Education extends ResumeSection {
     constructor(degree, university) {
         super("Освіта");
@@ -101,7 +96,6 @@ class Education extends ResumeSection {
     }
 }
 
-// Секція: Навички
 class Skills extends ResumeSection {
     constructor(skillsArray) {
         super("Навички");
@@ -122,7 +116,6 @@ class Skills extends ResumeSection {
     }
 }
 
-// Управління резюме та збереження
 class Resume {
     constructor() {
         this.sections = [];
@@ -142,7 +135,6 @@ class Resume {
     }
 }
 
-// Ініціалізація та обробка подій
 const createResumeBtn = document.getElementById("createResumeBtn");
 
 createResumeBtn?.addEventListener("click", () => {
