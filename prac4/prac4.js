@@ -3,6 +3,8 @@
 const taskInput = document.getElementById("taskInput");
 const addTaskButton = document.getElementById("addTask");
 const taskList = document.getElementById("taskList");
+const deleteTitle = document.querySelector("p");
+const heaederInput = document.querySelector("h1");
 
 addTaskButton.addEventListener("click", function() {
     const taskText = taskInput.value.trim();
@@ -23,12 +25,7 @@ addTaskButton.addEventListener("click", function() {
     }
 });
 
-taskList.addEventListener("click", function(event) {
-    if (event.target.nodeName === "LI") {
-        const removedTask = event.target.textContent;
-
-        event.target.remove();
-
-        console.log(`Завдання видалено: "${removedTask}"`);
-    }
+deleteTitle.addEventListener("click", function(event) {
+        heaederInput.remove();
 });
+

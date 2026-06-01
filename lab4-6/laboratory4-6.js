@@ -20,9 +20,11 @@ async function fetchMovies() {
         if (!response.ok) {
             throw new Error(`Помилка сервера: ${response.status}`);
         }
-        
+
         const data = await response.json();
         allMovies = data;
+
+        console.log(allMovies);
         handleProcessData();
     } catch (error) {
         showError(`Не вдалося завантажити дані: ${error.message}`);
